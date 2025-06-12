@@ -7,7 +7,7 @@ defmodule Tunez.Music.Album do
 
     # create a database index for the foreign key
     references do
-      reference :artist, index?: true
+      reference :artist, index?: true, on_delete: :delete
     end
   end
 
