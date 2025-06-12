@@ -114,8 +114,6 @@ defmodule TunezWeb.Albums.FormLive do
   end
 
   def handle_event("save", %{"form" => form_data}, socket) do
-    # form_data = Map.put(form_data, "artist_id", socket.assigns.artist.id)
-
     case AshPhoenix.Form.submit(socket.assigns.form, params: form_data) do
       {:ok, _album} ->
         socket =
