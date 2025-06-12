@@ -3,6 +3,10 @@ defmodule Tunez.Music do
     otp_app: :tunez,
     extensions: [AshPhoenix]
 
+  forms do
+    form :create_album, args: [:artist_id]
+  end
+
   resources do
     resource Tunez.Music.Artist do
       define :create_artist, action: :create
