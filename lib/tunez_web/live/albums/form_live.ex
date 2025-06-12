@@ -3,21 +3,25 @@ defmodule TunezWeb.Albums.FormLive do
 
   def mount(%{"id" => id}, _session, socket) do
     album = Tunez.Music.get_album_by_id!(id)
+    artist = Tunez.Music.get_artist_by_id!(album.artist_id)
     form = Tunez.Music.form_to_update_album(album)
 
     socket =
       socket
+      |> assign(:artist, artist)
       |> assign(:form, to_form(form))
       |> assign(:page_title, "Edit Album")
 
     {:ok, socket}
   end
 
-  def mount(_params, _session, socket) do
+  def mount(%{"artist_id" => artist_id}, _session, socket) do
+    artist = Tunez.Music.get_artist_by_id!(artist_id)
     form = Tunez.Music.form_to_create_album()
 
     socket =
       socket
+      |> assign(:artist, artist)
       |> assign(:form, to_form(form))
       |> assign(:page_title, "New Album")
 
@@ -39,7 +43,7 @@ defmodule TunezWeb.Albums.FormLive do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input name="artist_id" label="Artist" value="" disabled />
+        <.input name="artist_id" label="Artist" value={@artist.name} disabled />
         <div class="sm:flex gap-8 space-y-8 md:space-y-0">
           <div class="sm:w-3/4"><.input field={form[:name]} label="Name" /></div>
           <div class="sm:w-1/4">
