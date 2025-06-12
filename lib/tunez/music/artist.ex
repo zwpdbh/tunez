@@ -35,6 +35,10 @@ defmodule Tunez.Music.Artist do
     timestamps()
   end
 
+  relationships do
+    has_many :albums, Tunez.Music.Album
+  end
+
   def test do
     Tunez.Music.Artist
     |> Ash.Query.for_read(:read)
