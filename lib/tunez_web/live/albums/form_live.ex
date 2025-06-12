@@ -1,8 +1,20 @@
 defmodule TunezWeb.Albums.FormLive do
   use TunezWeb, :live_view
 
+  def mount(%{"id" => id}, _session, socket) do
+    album = Tunez.Music.get_album_by_id!(id)
+    form = Tunez.Music.form_to_update_album(album)
+
+    socket =
+      socket
+      |> assign(:form, to_form(form))
+      |> assign(:page_title, "Edit Album")
+
+    {:ok, socket}
+  end
+
   def mount(_params, _session, socket) do
-    form = %{}
+    form = Tunez.Music.form_to_create_album()
 
     socket =
       socket
@@ -93,12 +105,29 @@ defmodule TunezWeb.Albums.FormLive do
     """
   end
 
-  def handle_event("validate", %{"form" => _form_data}, socket) do
+  def handle_event("validate", %{"form" => form_data}, socket) do
+    socket = update(socket, :form, fn form -> AshPhoenix.Form.validate(form, form_data) end)
     {:noreply, socket}
   end
 
-  def handle_event("save", %{"form" => _form_data}, socket) do
-    {:noreply, socket}
+  def handle_event("save", %{"form" => form_data}, socket) do
+    case AshPhoenix.Form.submit(socket.assigns.form, params: form_data) do
+      {:ok, album} ->
+        socket =
+          socket
+          |> put_flash(:info, "Album created successfully")
+          |> push_navigate(to: ~p"/artists/#{album.artist.id}")
+
+        {:noreply, socket}
+
+      {:error, from} ->
+        socket =
+          socket
+          |> put_flash(:error, "There was an error creating the album")
+          |> assign(:form, from)
+
+        {:noreply, socket}
+    end
   end
 
   def handle_event("add-track", _params, socket) do
