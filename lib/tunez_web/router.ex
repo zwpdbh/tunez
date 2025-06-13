@@ -17,6 +17,7 @@ defmodule TunezWeb.Router do
   scope "/api/json" do
     pipe_through [:api]
 
+    # visit: /api/json/swaggerui
     forward "/swaggerui", OpenApiSpex.Plug.SwaggerUI,
       path: "/api/json/open_api",
       default_model_expand_depth: 4

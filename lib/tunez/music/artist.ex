@@ -1,5 +1,16 @@
 defmodule Tunez.Music.Artist do
-  use Ash.Resource, otp_app: :tunez, domain: Tunez.Music, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    otp_app: :tunez,
+    domain: Tunez.Music,
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource]
+
+  json_api do
+    type "artist"
+    includes [:albums]
+    # disable the generated filtering in the open_api
+    derive_filter? false
+  end
 
   postgres do
     table "artists"
@@ -8,6 +19,10 @@ defmodule Tunez.Music.Artist do
     custom_indexes do
       index "name gin_trgm_ops", name: "artist_name_gin_index", using: "GIN"
     end
+  end
+
+  resource do
+    description "A person or group of people that makes and releases music."
   end
 
   actions do
@@ -20,7 +35,10 @@ defmodule Tunez.Music.Artist do
     end
 
     read :search do
+      description "List Artists, optionally filtering by name."
+
       argument :query, :ci_string do
+        description "Return only artists with names including the given value."
         constraints allow_empty?: true
         default ""
       end
@@ -65,6 +83,7 @@ defmodule Tunez.Music.Artist do
   relationships do
     has_many :albums, Tunez.Music.Album do
       sort year_released: :desc
+      public? true
     end
   end
 
@@ -90,13 +109,5 @@ defmodule Tunez.Music.Artist do
 
     # calculate :cover_image_url, :string, expr(first(albumns, field: :cover_image_url))
     first :cover_image_url, :albums, :cover_image_url
-  end
-
-  def test do
-    Tunez.Music.Artist
-    |> Ash.Query.for_read(:read)
-    |> Ash.Query.sort(name: :asc)
-    |> Ash.Query.limit(1)
-    |> Ash.read()
   end
 end
