@@ -15,6 +15,7 @@ defmodule TunezWeb.Artists.IndexLive do
     sort_by = Map.get(params, "sort_by") |> validate_sort_by()
     query_text = Map.get(params, "q", "")
 
+    # use `sort_input` for succinct yes expressive sorting
     artists = Tunez.Music.search_artists!(query_text, query: [sort_input: sort_by])
 
     socket =
