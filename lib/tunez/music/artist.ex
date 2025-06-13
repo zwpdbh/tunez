@@ -68,6 +68,30 @@ defmodule Tunez.Music.Artist do
     end
   end
 
+  calculations do
+    # Tunez.Music.search_artists("a", load: [:album_count])
+    # calculate :album_count, :integer, expr(count(albums))
+    # Tunez.Music.search_artists("a", load: [:latest_album_year_released])
+    # calculate :latest_album_year_released, :integer, expr(first(albums, field: :year_released))
+    # calculate :cover_image_url, :string, expr(first(albumns, field: :cover_image_url))
+  end
+
+  # https://hexdocs.pm/ash/dsl-ash-resource.html#aggregates
+  aggregates do
+    # calculate :album_count, :integer, expr(count(albums))
+    count :album_count, :albums do
+      public? true
+    end
+
+    # calculate :latest_album_year_released, :integer, expr(first(albums, field: :year_released))
+    first :latest_album_year_released, :albums, :year_released do
+      public? true
+    end
+
+    # calculate :cover_image_url, :string, expr(first(albumns, field: :cover_image_url))
+    first :cover_image_url, :albums, :cover_image_url
+  end
+
   def test do
     Tunez.Music.Artist
     |> Ash.Query.for_read(:read)

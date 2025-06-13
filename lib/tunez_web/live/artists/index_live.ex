@@ -18,7 +18,10 @@ defmodule TunezWeb.Artists.IndexLive do
 
     # use `sort_input` for succinct yes expressive sorting
     page =
-      Tunez.Music.search_artists!(query_text, query: [sort_input: sort_by], page: page_params)
+      Tunez.Music.search_artists!(query_text,
+        query: [sort_input: sort_by],
+        page: page_params
+      )
 
     socket =
       socket
@@ -65,7 +68,7 @@ defmodule TunezWeb.Artists.IndexLive do
     ~H"""
     <div id={"artist-#{@artist.id}"} data-role="artist-card" class="relative mb-2">
       <.link navigate={~p"/artists/#{@artist.id}"}>
-        <.cover_image />
+        <.cover_image image={@artist.cover_image_url} />
       </.link>
     </div>
     <p class="flex justify-between">
@@ -76,6 +79,7 @@ defmodule TunezWeb.Artists.IndexLive do
       >
         {@artist.name}
       </.link>
+      <.artist_card_album_info artist={@artist} />
     </p>
     """
   end
@@ -180,7 +184,9 @@ defmodule TunezWeb.Artists.IndexLive do
     [
       {"recently updated", "-updated_at"},
       {"recently added", "-inserted_at"},
-      {"name", "name"}
+      {"name", "name"},
+      {"number of albums", "-album_count"},
+      {"latest album release", "--latest_album_year_released"}
     ]
   end
 

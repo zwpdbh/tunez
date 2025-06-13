@@ -63,6 +63,15 @@ defmodule Tunez.Music.Album do
     end
   end
 
+  calculations do
+    calculate :years_ago, :integer, expr(2025 - year_released)
+
+    #  Tunez.Music.get_artist_by_id(«uuid», load: [albums: [:string_years_ago]])
+    calculate :string_year_ago,
+              :string,
+              expr("wow, this was released " <> years_ago <> " years ago!")
+  end
+
   # After defining identity, do not forget:
   # first, `mix ash.codegen update_<your_identity>`.
   # then, `mix ash.migrate`
