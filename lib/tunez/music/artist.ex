@@ -124,6 +124,9 @@ defmodule Tunez.Music.Artist do
       sort year_released: :desc
       public? true
     end
+
+    belongs_to :created_by, Tunez.Accounts.User
+    belongs_to :updated_by, Tunez.Accounts.User
   end
 
   calculations do
