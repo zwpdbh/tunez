@@ -4,7 +4,7 @@ defmodule Tunez.Accounts.User do
     domain: Tunez.Accounts,
     data_layer: AshPostgres.DataLayer,
     authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    extensions: [AshGraphql.Resource, AshJsonApi.Resource, AshAuthentication]
 
   authentication do
     add_ons do
@@ -52,6 +52,14 @@ defmodule Tunez.Accounts.User do
         sender Tunez.Accounts.User.Senders.SendMagicLinkEmail
       end
     end
+  end
+
+  graphql do
+    type :user
+  end
+
+  json_api do
+    type "user"
   end
 
   postgres do
@@ -274,25 +282,6 @@ defmodule Tunez.Accounts.User do
     end
   end
 
-  attributes do
-    uuid_primary_key :id
-
-    attribute :email, :ci_string do
-      allow_nil? false
-      public? true
-    end
-
-    attribute :hashed_password, :string do
-      sensitive? true
-    end
-
-    attribute :confirmed_at, :utc_datetime_usec
-  end
-
-  identities do
-    identity :unique_email, [:email]
-  end
-
   def test_new_user_create do
     Tunez.Accounts.User
     |> Ash.Changeset.for_create(:register_with_password, %{
@@ -310,5 +299,24 @@ defmodule Tunez.Accounts.User do
       password: "gghh3344"
     })
     |> Ash.read(authorize?: false)
+  end
+
+  attributes do
+    uuid_primary_key :id
+
+    attribute :email, :ci_string do
+      allow_nil? false
+      public? true
+    end
+
+    attribute :hashed_password, :string do
+      sensitive? true
+    end
+
+    attribute :confirmed_at, :utc_datetime_usec
+  end
+
+  identities do
+    identity :unique_email, [:email]
   end
 end
