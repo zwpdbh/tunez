@@ -87,3 +87,6 @@ config :swoosh, :api_client, false
 # To get more information about what’s going on,
 # we can enable authentication debugging for our development environment only
 config :ash_authentication, debug_authentication_failures?: true
+
+# Toggle this to show why policy checking failed for a resource action
+config :ash, :policies, show_policy_breakdowns?: false
