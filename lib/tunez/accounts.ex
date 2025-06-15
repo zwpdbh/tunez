@@ -33,6 +33,21 @@ defmodule Tunez.Accounts do
 
   resources do
     resource Tunez.Accounts.Token
-    resource Tunez.Accounts.User
+
+    resource Tunez.Accounts.User do
+      define :set_user_role, action: :set_role, args: [:role]
+      define :get_user_by_id, action: :read, get_by: [:id]
+      define :list_users, action: :read
+    end
+  end
+
+  def test_list_users do
+    {:ok, users} = Tunez.Accounts.list_users(authorize?: false)
+    users
+  end
+
+  def test_set_user_role do
+    {:ok, [first | _others]} = Tunez.Accounts.list_users(authorize?: false)
+    Tunez.Accounts.set_user_role(first, :admin, authorize?: false)
   end
 end
