@@ -7,7 +7,7 @@ defmodule TunezWeb.Albums.FormLive do
       Tunez.Music.get_album_by_id!(album_id, load: [:artist], actor: socket.assigns.current_user)
 
     form =
-      Tunez.Music.form_to_update_album(album, acstor: socket.assigns.current_user)
+      Tunez.Music.form_to_update_album(album, actor: socket.assigns.current_user)
       |> AshPhoenix.Form.ensure_can_submit!()
 
     socket =
@@ -24,7 +24,7 @@ defmodule TunezWeb.Albums.FormLive do
       Tunez.Music.get_artist_by_id!(artist_id, actor: socket.assigns.current_user)
 
     form =
-      Tunez.Music.form_to_create_album(artist.id, acstor: socket.assigns.current_user)
+      Tunez.Music.form_to_create_album(artist.id, actor: socket.assigns.current_user)
       |> AshPhoenix.Form.ensure_can_submit!()
 
     socket =
