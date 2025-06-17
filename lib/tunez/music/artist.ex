@@ -85,19 +85,9 @@ defmodule Tunez.Music.Artist do
       authorize_if always()
     end
 
-    # policy action(:create) do
-    #   # see p160
-    #   authorize_if actor_attribute_equals(:role, :admin)
-    # end
-
     policy action(:update) do
-      # authorize_if actor_attribute_equals(:role, :admin)
       authorize_if actor_attribute_equals(:role, :editor)
     end
-
-    # policy action(:destory) do
-    #   authorize_if actor_attribute_equals(:role, :admin)
-    # end
   end
 
   attributes do

@@ -51,7 +51,6 @@ defmodule Tunez.Music.Album do
 
     # such that only the user who created the album can update or destroy it
     policy action([:update, :destroy]) do
-      # authorize_if relates_to_actor_via(:created_by)
       authorize_if expr(^actor(:role) == :editor and created_by_id == ^actor(:id))
     end
   end

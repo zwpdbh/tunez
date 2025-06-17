@@ -1,4 +1,5 @@
 defmodule TunezWeb.Albums.FormLive do
+  require Logger
   use TunezWeb, :live_view
 
   def mount(%{"id" => album_id}, _session, socket) do
@@ -19,7 +20,8 @@ defmodule TunezWeb.Albums.FormLive do
   end
 
   def mount(%{"artist_id" => artist_id}, _session, socket) do
-    artist = Tunez.Music.get_artist_by_id!(artist_id, actor: socket.assigns.current_user)
+    artist =
+      Tunez.Music.get_artist_by_id!(artist_id, actor: socket.assigns.current_user)
 
     form =
       Tunez.Music.form_to_create_album(artist.id, acstor: socket.assigns.current_user)

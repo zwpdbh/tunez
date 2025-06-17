@@ -89,4 +89,4 @@ config :swoosh, :api_client, false
 config :ash_authentication, debug_authentication_failures?: true
 
 # Toggle this to show why policy checking failed for a resource action
-config :ash, :policies, show_policy_breakdowns?: false
+config :ash, :policies, show_policy_breakdowns?: true
