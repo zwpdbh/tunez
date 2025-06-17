@@ -1,5 +1,9 @@
 defmodule Tunez.Music.Track do
-  use Ash.Resource, otp_app: :tunez, domain: Tunez.Music, data_layer: AshPostgres.DataLayer
+  use Ash.Resource,
+    otp_app: :tunez,
+    domain: Tunez.Music,
+    data_layer: AshPostgres.DataLayer,
+    authorizers: [Ash.Policy.Authorizer]
 
   postgres do
     table "tracks"
@@ -23,6 +27,15 @@ defmodule Tunez.Music.Track do
     update :update do
       primary? true
       accept [:order, :name, :duration_seconds]
+    end
+  end
+
+  policies do
+    # “if tracks are being read/created/updated/deleted through
+    # a :tracks relationship on the Tunez.Music.Album resource, then the request is authorized”.
+    policy always() do
+      authorize_if accessing_from(Tunez.Music.Album, :tracks)
+      authorize_if action_type(:read)
     end
   end
 

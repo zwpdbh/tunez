@@ -28,11 +28,25 @@ defmodule Tunez.Music.Album do
     defaults [:read, :destroy]
 
     create :create do
-      accept [:name, :year_released, :cover_image_url, :artist_id]
+      accept [:name, :year_released, :cover_image_url]
+
+      # The following is equal to set `:artist_id` in `accept [:name, :year_released, :cover_image_url, :artist_id]`
+      argument :artist_id, :uuid, allow_nil?: false
+      change manage_relationship(:artist_id, :artist, type: :append_and_remove)
+
+      argument :tracks, {:array, :map}
+      # Because the name of the argument and the name of the relationship to be
+      # managed are the same (tracks), we can omit one when calling manage_relationship.
+      change manage_relationship(:tracks, type: :direct_control)
     end
 
     update :update do
       accept [:name, :year_released, :cover_image_url]
+      # TODO: fix this to be atomic
+      require_atomic? false
+
+      argument :tracks, {:array, :map}
+      change manage_relationship(:tracks, type: :direct_control)
     end
   end
 
