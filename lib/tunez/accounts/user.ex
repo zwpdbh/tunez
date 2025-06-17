@@ -290,25 +290,6 @@ defmodule Tunez.Accounts.User do
     end
   end
 
-  def test_new_user_create do
-    Tunez.Accounts.User
-    |> Ash.Changeset.for_create(:register_with_password, %{
-      email: "hyperion_z@outlook.com",
-      password: "gghh3344",
-      password_confirmation: "gghh3344"
-    })
-    |> Ash.create!(authorize?: false)
-  end
-
-  def test_user_login do
-    Tunez.Accounts.User
-    |> Ash.Query.for_read(:sign_in_with_password, %{
-      email: "hyperion_z@outlook.com",
-      password: "gghh3344"
-    })
-    |> Ash.read(authorize?: false)
-  end
-
   attributes do
     uuid_primary_key :id
 
