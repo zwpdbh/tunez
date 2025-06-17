@@ -39,6 +39,11 @@ defmodule Tunez.Music.Track do
     end
   end
 
+  preparations do
+    # always want this number calculation loaded, when loading track data
+    prepare build(load: [:number])
+  end
+
   attributes do
     uuid_primary_key :id
 
@@ -61,5 +66,9 @@ defmodule Tunez.Music.Track do
     belongs_to :album, Tunez.Music.Album do
       allow_nil? false
     end
+  end
+
+  calculations do
+    calculate :number, :integer, expr(order + 1)
   end
 end

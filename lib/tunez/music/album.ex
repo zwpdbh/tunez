@@ -37,7 +37,9 @@ defmodule Tunez.Music.Album do
       argument :tracks, {:array, :map}
       # Because the name of the argument and the name of the relationship to be
       # managed are the same (tracks), we can omit one when calling manage_relationship.
-      change manage_relationship(:tracks, type: :direct_control)
+      # `order_is_key` take the position of the record in the list,
+      # and set it as the value of the attribute we specify which is `:order`
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
 
     update :update do
@@ -46,7 +48,7 @@ defmodule Tunez.Music.Album do
       require_atomic? false
 
       argument :tracks, {:array, :map}
-      change manage_relationship(:tracks, type: :direct_control)
+      change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
   end
 

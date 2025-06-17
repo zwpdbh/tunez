@@ -108,7 +108,7 @@ defmodule TunezWeb.Artists.ShowLive do
     <table :if={@tracks != []} class="w-full mt-2 -z-10">
       <tr :for={track <- @tracks} class="border-t first:border-0 border-gray-100">
         <th class="whitespace-nowrap w-1 p-3">
-          {String.pad_leading("#{track.order}", 2, "0")}.
+          {String.pad_leading("#{track.number}", 2, "0")}.
         </th>
         <td class="p-3">{track.name}</td>
         <td class="whitespace-nowrap w-1 text-right p-2">{track.duration_seconds}</td>
