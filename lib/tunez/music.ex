@@ -58,7 +58,9 @@ defmodule Tunez.Music do
       define :search_artists,
         action: :search,
         args: [:query],
-        default_options: [load: [:album_count, :latest_album_year_released, :cover_image_url]]
+        default_options: [
+          load: [:followed_by_me, :album_count, :latest_album_year_released, :cover_image_url]
+        ]
     end
 
     resource Tunez.Music.Album do
