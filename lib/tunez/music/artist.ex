@@ -21,7 +21,10 @@ defmodule Tunez.Music.Artist do
 
   json_api do
     type "artist"
-    includes [:albums]
+    # includes [:albums] (previously defined to just include albums when readh artist)
+    # With this config, users can request either albums to be included for an artist
+    # with include=albums in the query string, or albums and their tracks with include=albums.tracks.
+    includes albums: [:tracks]
     # disable the generated filtering in the open_api
     derive_filter? false
   end

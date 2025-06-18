@@ -12,6 +12,10 @@ defmodule Tunez.Music.Album do
 
   json_api do
     type "album"
+    # allow tracks to be included when reading an album
+    # This will allow users to add the `include=tracks` query parameter to their
+    # requests to Album-related endpoints, and the track data will be included.
+    includes [:tracks]
   end
 
   postgres do
@@ -125,6 +129,7 @@ defmodule Tunez.Music.Album do
 
     has_many :tracks, Tunez.Music.Track do
       sort order: :asc
+      public? true
     end
   end
 
