@@ -135,6 +135,12 @@ defmodule Tunez.Music.Album do
     calculate :string_year_ago,
               :string,
               expr("wow, this was released " <> years_ago <> " years ago!")
+
+    calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
+  end
+
+  aggregates do
+    sum :duration_seconds, :tracks, :duration_seconds
   end
 
   # After defining identity, do not forget:
