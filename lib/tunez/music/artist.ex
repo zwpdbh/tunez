@@ -118,6 +118,13 @@ defmodule Tunez.Music.Artist do
       public? true
     end
 
+    has_many :follower_relationships, Tunez.Music.ArtistFollower
+
+    many_to_many :followers, Tunez.Accounts.User do
+      join_relationship :follower_relationships
+      destination_attribute_on_join_resource :follower_id
+    end
+
     belongs_to :created_by, Tunez.Accounts.User
     belongs_to :updated_by, Tunez.Accounts.User
   end
@@ -128,6 +135,10 @@ defmodule Tunez.Music.Artist do
     # Tunez.Music.search_artists("a", load: [:latest_album_year_released])
     # calculate :latest_album_year_released, :integer, expr(first(albums, field: :year_released))
     # calculate :cover_image_url, :string, expr(first(albumns, field: :cover_image_url))
+
+    calculate :followed_by_me,
+              :boolean,
+              expr(exists(follower_relationships, follower_id == ^actor(:id)))
   end
 
   # https://hexdocs.pm/ash/dsl-ash-resource.html#aggregates

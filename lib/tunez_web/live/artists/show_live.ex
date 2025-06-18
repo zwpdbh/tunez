@@ -11,7 +11,7 @@ defmodule TunezWeb.Artists.ShowLive do
     artist =
       Tunez.Music.get_artist_by_id!(artist_id,
         # load tracks for each of the albums
-        load: [albums: [:duration, :tracks]],
+        load: [:followed_by_me, albums: [:duration, :tracks]],
         actor: socket.assigns.current_user
       )
 
@@ -29,6 +29,7 @@ defmodule TunezWeb.Artists.ShowLive do
       <.header>
         <.h1>
           {@artist.name}
+          <.follow_toggle on={@artist.followed_by_me} />
         </.h1>
         <:subtitle :if={@artist.previous_names != []}>
           formerly known as: {Enum.join(@artist.previous_names, ",")}
@@ -197,10 +198,21 @@ defmodule TunezWeb.Artists.ShowLive do
   end
 
   def handle_event("follow", _params, socket) do
+    socket =
+      case Tunez.Music.follow_artist(socket.assigns.artist, actor: socket.assigns.current_user) do
+        {:ok, _} ->
+          update(socket, :artist, &set_followed_by_me/1)
+
+        {:error, _} ->
+          put_flash(socket, :error, "could not follow artist")
+      end
+
     {:noreply, socket}
   end
 
   def handle_event("unfollow", _params, socket) do
     {:noreply, socket}
   end
+
+  defp set_followed_by_me(artist), do: %{artist | followed_by_me: true}
 end

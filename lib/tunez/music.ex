@@ -69,6 +69,25 @@ defmodule Tunez.Music do
     end
 
     resource Tunez.Music.Track
+
+    # resource Tunez.Music.ArtistFollower do
+    #   define :follow_artist, action: :create, args: [:artist]
+    # end
+
+    # improved version using custom inputs
+    resource Tunez.Music.ArtistFollower do
+      define :follow_artist do
+        action :create
+        args [:artist]
+
+        # use custom inputs: customize how we transform the input to the resource's action
+        # https://ash-project.github.io/ash/code-interfaces.html#customizing-the-generated-function
+        custom_input :artist, :struct do
+          constraints instance_of: Tunez.Music.Artist
+          transform to: :artist_id, using: & &1.id
+        end
+      end
+    end
   end
 
   def play do
