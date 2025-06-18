@@ -78,6 +78,8 @@ defmodule Tunez.Music.Album do
   changes do
     change relate_actor(:created_by, allow_nil?: true), on: [:create]
     change relate_actor(:updated_by, allow_nil?: true)
+
+    change Tunez.Accounts.Changes.SendNewAlbumNotifications, on: [:create]
   end
 
   validations do

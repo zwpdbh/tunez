@@ -39,6 +39,8 @@ defmodule Tunez.Accounts do
       define :get_user_by_id, action: :read, get_by: [:id]
       define :list_users, action: :read
     end
+
+    resource Tunez.Accounts.Notification
   end
 
   def test_list_users do
