@@ -138,7 +138,10 @@ defmodule Tunez.Music.Artist do
 
     calculate :followed_by_me,
               :boolean,
-              expr(exists(follower_relationships, follower_id == ^actor(:id)))
+              expr(exists(follower_relationships, follower_id == ^actor(:id))) do
+      # set to true such that user could use get url to set this option
+      public? true
+    end
   end
 
   # https://hexdocs.pm/ash/dsl-ash-resource.html#aggregates
@@ -155,5 +158,10 @@ defmodule Tunez.Music.Artist do
 
     # calculate :cover_image_url, :string, expr(first(albumns, field: :cover_image_url))
     first :cover_image_url, :albums, :cover_image_url
+
+    # use to count the artist's followers
+    count :follower_count, :follower_relationships do
+      public? true
+    end
   end
 end

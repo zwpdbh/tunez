@@ -81,6 +81,7 @@ defmodule TunezWeb.Artists.IndexLive do
       >
         {@artist.name}
       </.link>
+      <.follower_count_display count={@artist.follower_count} />
       <.artist_card_album_info artist={@artist} />
     </p>
     """
@@ -188,7 +189,9 @@ defmodule TunezWeb.Artists.IndexLive do
       {"recently added", "-inserted_at"},
       {"name", "name"},
       {"number of albums", "-album_count"},
-      {"latest album release", "--latest_album_year_released"}
+      {"latest album release", "--latest_album_year_released"},
+      {"popularity", "-follower_count"},
+      {"followed artists first", "-followed_by_me"}
     ]
   end
 
