@@ -227,5 +227,5 @@ defmodule TunezWeb.Artists.ShowLive do
   end
 
   defp set_followed_by_me_true(artist), do: %{artist | followed_by_me: true}
-  defp set_followed_by_me_false(artist), do: %{artist | followed_by_me: true}
+  defp set_followed_by_me_false(artist), do: %{artist | followed_by_me: false}
 end
