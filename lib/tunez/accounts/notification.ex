@@ -16,6 +16,8 @@ defmodule Tunez.Accounts.Notification do
   end
 
   actions do
+    defaults [:destroy]
+
     read :for_user do
       prepare build(load: [album: [:artist]], sort: [inserted_at: :desc])
       filter expr(user_id == ^actor(:id))
@@ -34,6 +36,10 @@ defmodule Tunez.Accounts.Notification do
 
     policy action(:for_user) do
       authorize_if actor_present()
+    end
+
+    policy action(:destroy) do
+      authorize_if relates_to_actor_via(:user)
     end
   end
 
