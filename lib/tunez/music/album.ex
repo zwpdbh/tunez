@@ -3,11 +3,23 @@ defmodule Tunez.Music.Album do
     otp_app: :tunez,
     domain: Tunez.Music,
     data_layer: AshPostgres.DataLayer,
-    extensions: [AshGraphql.Resource, AshJsonApi.Resource],
+    extensions: [AshOban, AshGraphql.Resource, AshJsonApi.Resource],
     authorizers: [Ash.Policy.Authorizer]
 
   graphql do
     type :album
+  end
+
+  oban do
+    triggers do
+      trigger :send_new_album_notifications do
+        action :send_new_album_notifications
+        queue :default
+        scheduler_cron false
+        worker_module_name Tunez.Music.Album.AshOban.Worker.SendNewAlbumNotifications
+        scheduler_module_name Tunez.Music.Album.AshOban.Scheduler.SendNewAlbumNotifications
+      end
+    end
   end
 
   json_api do
@@ -55,6 +67,10 @@ defmodule Tunez.Music.Album do
       change manage_relationship(:tracks, type: :direct_control, order_is_key: :order)
     end
 
+    update :send_new_album_notifications do
+      change Tunez.Accounts.Changes.SendNewAlbumNotifications
+    end
+
     destroy :destroy do
       primary? true
       change cascade_destroy(:notifications, return_notifications?: true, after_action?: false)
@@ -62,6 +78,10 @@ defmodule Tunez.Music.Album do
   end
 
   policies do
+    bypass AshOban.Checks.AshObanInteraction do
+      authorize_if always()
+    end
+
     bypass actor_attribute_equals(:role, :admin) do
       authorize_if always()
     end
@@ -84,8 +104,12 @@ defmodule Tunez.Music.Album do
     change relate_actor(:created_by, allow_nil?: true), on: [:create]
     change relate_actor(:updated_by, allow_nil?: true)
 
-    change Tunez.Accounts.Changes.SendNewAlbumNotifications, on: [:create]
+    # change Tunez.Accounts.Changes.SendNewAlbumNotifications, on: [:create]
+    # use oban to replace above solution
+    change run_oban_trigger(:send_new_album_notifications), on: [:create]
   end
+
+  def next_year, do: Date.utc_today().year + 1
 
   validations do
     validate numericality(:year_released,
@@ -102,8 +126,6 @@ defmodule Tunez.Music.Album do
              where: [changing(:cover_image_url)],
              message: "must start with https:// or /images/"
   end
-
-  def next_year, do: Date.utc_today().year + 1
 
   attributes do
     uuid_primary_key :id
