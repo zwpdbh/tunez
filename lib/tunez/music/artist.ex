@@ -76,6 +76,8 @@ defmodule Tunez.Music.Artist do
     end
 
     destroy :destroy do
+      primary? true
+      change cascade_destroy(:albums, return_notifications?: true, after_action: false)
     end
   end
 

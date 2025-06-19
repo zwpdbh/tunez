@@ -24,7 +24,7 @@ defmodule Tunez.Music.Album do
 
     # create a database index for the foreign key
     references do
-      reference :artist, index?: true, on_delete: :delete
+      reference :artist, index?: true
     end
   end
 
@@ -76,7 +76,7 @@ defmodule Tunez.Music.Album do
 
     # such that only the user who created the album can update or destroy it
     policy action([:update, :destroy]) do
-      authorize_if expr(^actor(:role) == :editor and created_by_id == ^actor(:id))
+      authorize_if expr(can_manage_album?)
     end
   end
 
@@ -151,6 +151,13 @@ defmodule Tunez.Music.Album do
               expr("wow, this was released " <> years_ago <> " years ago!")
 
     calculate :duration, :string, Tunez.Music.Calculations.SecondsToMinutes
+
+    calculate :can_manage_album?,
+              :boolean,
+              expr(
+                ^actor(:role) == :admin or
+                  (^actor(:role) == :editor and created_by_id == ^actor(:id))
+              )
   end
 
   aggregates do
