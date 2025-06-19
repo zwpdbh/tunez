@@ -7,6 +7,15 @@
 # General application configuration
 import Config
 
+config :ash_oban, pro?: false
+
+config :tunez, Oban,
+  engine: Oban.Engines.Basic,
+  notifier: Oban.Notifiers.Postgres,
+  queues: [default: 10],
+  repo: Tunez.Repo,
+  plugins: [{Oban.Plugins.Cron, []}]
+
 config :ash_graphql, authorize_update_destroy_with_error?: true
 
 config :mime,
