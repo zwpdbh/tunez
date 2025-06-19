@@ -30,6 +30,7 @@ defmodule TunezWeb.Router do
   scope "/", TunezWeb do
     pipe_through :browser
 
+    # This makes following liveview has socket.assigns.current_user
     ash_authentication_live_session :authenticated_routes do
       # in each liveview, add one of the following at the top of the module:
       #

@@ -1,5 +1,8 @@
 defmodule TunezWeb.NotificationsLive do
   use TunezWeb, :live_view
+  # This has same effect as `ash_authentication_live_session`
+  # Solution for solving `sticky: true` liveview
+  on_mount {TunezWeb.LiveUserAuth, :current_user}
 
   def mount(_params, _session, socket) do
     notifications = Tunez.Accounts.notifications_for_user!(actor: socket.assigns.current_user)

@@ -1,4 +1,4 @@
-defmodule Tunez.Music.Changes.SendNewAlbumNotifications do
+defmodule Tunez.Accounts.Changes.SendNewAlbumNotifications do
   use Ash.Resource.Change
 
   # @impl true
@@ -17,6 +17,7 @@ defmodule Tunez.Music.Changes.SendNewAlbumNotifications do
   # end
 
   # compare with above version, this one is using steam
+  @impl true
   def change(changeset, _opts, _context) do
     changeset
     |> Ash.Changeset.after_action(fn _changeset, album ->
