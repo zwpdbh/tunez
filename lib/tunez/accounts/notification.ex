@@ -16,6 +16,11 @@ defmodule Tunez.Accounts.Notification do
   end
 
   actions do
+    read :for_user do
+      prepare build(load: [album: [:artist]], sort: [inserted_at: :desc])
+      filter expr(user_id == ^actor(:id))
+    end
+
     create :create do
       accept [:user_id, :album_id]
     end
@@ -25,6 +30,10 @@ defmodule Tunez.Accounts.Notification do
     # The create action should be only executed by our system with option `authorize?: false`
     policy action(:create) do
       forbid_if always()
+    end
+
+    policy action(:for_user) do
+      authorize_if actor_present()
     end
   end
 

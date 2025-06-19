@@ -2,7 +2,7 @@ defmodule TunezWeb.NotificationsLive do
   use TunezWeb, :live_view
 
   def mount(_params, _session, socket) do
-    notifications = []
+    notifications = Tunez.Accounts.notifications_for_user!(actor: socket.assigns.current_user)
     {:ok, assign(socket, notifications: notifications)}
   end
 

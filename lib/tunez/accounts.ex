@@ -40,7 +40,9 @@ defmodule Tunez.Accounts do
       define :list_users, action: :read
     end
 
-    resource Tunez.Accounts.Notification
+    resource Tunez.Accounts.Notification do
+      define :notifications_for_user, action: :for_user
+    end
   end
 
   def test_list_users do
