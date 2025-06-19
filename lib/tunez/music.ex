@@ -84,6 +84,8 @@ defmodule Tunez.Music do
 
     # improved version using custom inputs
     resource Tunez.Music.ArtistFollower do
+      define :followers_for_artist, action: :for_artist, args: [:artist_id]
+
       define :follow_artist do
         action :create
         args [:artist]
