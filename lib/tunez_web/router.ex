@@ -32,6 +32,8 @@ defmodule TunezWeb.Router do
 
     # This makes following liveview has socket.assigns.current_user
     ash_authentication_live_session :authenticated_routes do
+      live "/chat", ChatLive
+      live "/chat/:conversation_id", ChatLive
       # in each liveview, add one of the following at the top of the module:
       #
       # If an authenticated user must be present:
