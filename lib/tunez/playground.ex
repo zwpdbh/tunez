@@ -18,4 +18,8 @@ defmodule Tunez.Playground do
   def set_user_to_editor(username) do
     assign_user_role(username, :editor)
   end
+
+  def set_user_to_admin(username) do
+    assign_user_role(username, :admin)
+  end
 end
