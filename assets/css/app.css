@@ -2,9 +2,11 @@
    https://tailwindcss.com/docs/configuration */
 
 @import "tailwindcss" source(none);
+@source "../../deps/ash_authentication_phoenix";
 @source "../css";
 @source "../js";
 @source "../../lib/tunez_web";
+
 
 @plugin "@tailwindcss/forms";
 

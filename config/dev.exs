@@ -19,7 +19,7 @@ config :tunez, Tunez.Repo,
 config :tunez, TunezWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {127, 0, 0, 1}, port: 8000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
@@ -63,7 +63,7 @@ config :tunez, TunezWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :tunez, dev_routes: true
+config :tunez, dev_routes: true, token_signing_secret: "p7EiiviNJJv3QaDlEcuPtmq9BLxwdLQC"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
@@ -83,3 +83,12 @@ config :phoenix_live_view,
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false
+
+# To get more information about what’s going on,
+# we can enable authentication debugging for our development environment only
+config :ash_authentication, debug_authentication_failures?: true
+
+# Toggle this to show why policy checking failed for a resource action
+config :ash, :policies, show_policy_breakdowns?: true
+
+config :ash, :pub_sub, debug?: true

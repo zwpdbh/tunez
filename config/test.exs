@@ -1,4 +1,7 @@
 import Config
+config :tunez, Oban, testing: :manual
+config :tunez, token_signing_secret: "ih1IK063BPK3V6M/cNJxk/m1sBuwlJEE"
+config :bcrypt_elixir, log_rounds: 1
 
 # Configure your database
 #

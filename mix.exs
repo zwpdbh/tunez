@@ -34,6 +34,23 @@ defmodule Tunez.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:usage_rules, "~> 0.1", only: [:dev]},
+      {:ash_ai, "~> 0.2"},
+      {:oban, "~> 2.0"},
+      {:ash_oban, "~> 0.4"},
+      {:ash_authentication_phoenix, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"},
+      # {:picosat_elixir, "~> 0.2"},
+      {:simple_sat, "~> 0.1.3"},
+      {:ash_authentication, "~> 4.0"},
+      {:absinthe_phoenix, "~> 2.0"},
+      {:ash_graphql, "~> 1.0"},
+      {:open_api_spex, "~> 3.0"},
+      {:ash_json_api, "~> 1.0"},
+      {:ash_phoenix, "~> 2.0"},
+      {:ash_postgres, "~> 2.0"},
+      {:sourceror, "~> 1.8", only: [:dev, :test]},
+      {:ash, "~> 3.0"},
       {:phoenix, "~> 1.8.0-rc.1", override: true},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -44,7 +61,7 @@ defmodule Tunez.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -61,7 +78,8 @@ defmodule Tunez.MixProject do
       {:dns_cluster, "~> 0.2"},
       {:bandit, "~> 1.5"},
       {:igniter, "~> 0.3", only: [:dev]},
-      {:phoenix_test, github: "germsvel/phoenix_test", only: :test, runtime: false}
+      {:phoenix_test, github: "germsvel/phoenix_test", only: :test, runtime: false},
+      {:dotenv, "~> 3.1.0", only: [:dev, :test]}
     ]
   end
 
@@ -73,15 +91,15 @@ defmodule Tunez.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ash.setup", "assets.setup", "assets.build", "run priv/repo/seeds.exs"],
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       seed: [
-        # "run priv/repo/seeds/01-artists.exs",
-        # "run priv/repo/seeds/02-albums.exs",
-        # "run priv/repo/seeds/08-tracks.exs"
+        "run priv/repo/seeds/01-artists.exs",
+        "run priv/repo/seeds/02-albums.exs",
+        "run priv/repo/seeds/08-tracks.exs"
       ],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      test: ["ash.setup --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind tunez", "esbuild tunez"],
       "assets.deploy": [
