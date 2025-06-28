@@ -33,6 +33,12 @@ defmodule MathTest do
   # the `run` function is available because it
   # is injected from Assertion
 
+  test "integers can be added and subtracted" do
+    assert 1 + 1 == 2
+    assert 2 + 3 == 5
+    assert 5 - 5 == 10
+  end
+
   def demo() do
     MathTest.run()
   end
